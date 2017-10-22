@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- 
+    押盘对象 （映射配置文件  对应一个表）
+-->
+<hibernate-mapping>
+    <class name="com.diandui.model.BettlePlate" table="bettleplate">
+        <id name="bettlePlateId" type="java.lang.Integer">
+            <column name="bettlePlate_id" />
+            <generator class="native"></generator>
+        </id>
+        
+        <property name="stockId" type="java.lang.String">
+            <column name="stock_id" />
+        </property>
+        
+        <property name="stockName" type="java.lang.String">
+            <column name="stock_name" />
+        </property>
+
+        <property name="bettlePlateDate" type="java.sql.Date">
+            <column name="bettlePlate_date" />
+        </property>
+        
+        <property name="bettlePlateAllJifen" type="java.lang.Integer">
+            <column name="bettlePlate_all_jifen" />
+        </property>
+        
+        <property name="bettlePlateRiseJifen" type="java.lang.Integer">
+            <column name="bettlePlate_rise_jifen" />
+        </property>
+        
+        <property name="bettlePlateDropJifen" type="java.lang.Integer">
+            <column name="bettlePlate_drop_jifen" />
+        </property>
+        
+        <property name="riseDropType" type="java.lang.Integer">
+            <column name="rise_drop_type" />
+        </property>
+        
+    </class>
+</hibernate-mapping>

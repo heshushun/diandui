@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- 
+    签到记录对象 （映射配置文件  对应一个表）
+-->
+
+<hibernate-mapping>
+    <class name="com.diandui.model.Qiandao" table="qiandao">
+        <id name="qiandaoId">
+            <column name="qiandao_id" />
+            <generator class="identity"></generator>
+        </id>
+        
+        <property name="userId" type="java.lang.Integer">
+            <column name="user_id" />
+        </property>
+
+        <property name="qiandaoDate" type="java.sql.Date">
+            <column name="qiandao_date" />
+        </property>
+        
+        <property name="qiandaoJifen" type="java.lang.Integer">
+            <column name="qiandao_jifen" />
+        </property>
+        
+    </class>
+</hibernate-mapping>

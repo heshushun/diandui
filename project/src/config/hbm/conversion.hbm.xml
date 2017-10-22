@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- 
+    兑换信息对象 （映射配置文件  对应一个表）
+-->
+<hibernate-mapping>
+    <class name="com.diandui.model.Conversion" table="conversion">
+        <id name="conversionId">
+            <column name="conversion_id" />
+            <generator class="identity"></generator>
+        </id>
+        
+        <property name="userId" type="java.lang.Integer">
+            <column name="user_id" />
+        </property>
+
+        <property name="goodsId" type="java.lang.Integer">
+            <column name="goods_id" />
+        </property>
+        
+        <property name="goodsName" type="java.lang.String">
+            <column name="goods_name" />
+        </property>
+                 
+        <property name="goodsJifen" type="java.lang.Integer">
+            <column name="goods_jifen" />
+        </property>
+        
+        <property name="peopleName" type="java.lang.String">
+            <column name="people_name" />
+        </property>
+        
+        <property name="phone" type="java.lang.String">
+            <column name="phone" />
+        </property>
+        
+        <property name="address" type="java.lang.String">
+            <column name="address" />
+        </property>
+        
+        
+        
+    </class>
+</hibernate-mapping>

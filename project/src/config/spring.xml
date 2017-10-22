@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<beans xmlns="http://www.springframework.org/schema/beans"    
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"   
+    xmlns:p="http://www.springframework.org/schema/p"  
+    xmlns:aop="http://www.springframework.org/schema/aop"   
+    xmlns:context="http://www.springframework.org/schema/context"  
+    xmlns:jee="http://www.springframework.org/schema/jee"  
+    xmlns:tx="http://www.springframework.org/schema/tx"  
+    xsi:schemaLocation="    
+        http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.0.xsd  
+        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd  
+        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd  
+        http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee-4.0.xsd  
+        http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.0.xsd"> 
+    
+    <!--  导入springMvc.xml配置文件 -->
+    <import resource="classpath:config/spring-mvc.xml" />
+    
+    <!-- 以下：连接数据库配置文件: hibernate.cfg.xml-->
+    <!-- 加载数据库配置 -->
+    <context:property-placeholder location="classpath:config/db.properties" />
+    
+	<!-- 配置数据源 连接数据库的基本信息 -->
+	<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+		<property name="driverClassName" value="${db.driverClassName}" />
+		<property name="url" value="${db.url}" />
+		<property name="username" value="${db.username}" />
+		<property name="password" value="${db.password}" />
+		
+		<property name="maxActive" value="${db.maxActive}" />
+		<property name="maxIdle" value="${db.maxIdle}" />
+		<property name="minIdle" value="${db.minIdle}" />
+		<property name="maxWait" value="${db.maxWait}" />
+	</bean>
+    
+    <!-- 配置hibernate的sessionFactory实例 这个bean由spring的LocalSessionFactoryBean提供 -->
+    <bean id="sessionFactory" class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">  
+    
+        <!-- 1.配置数据源 -->
+        <property name="dataSource" ref="dataSource" /> 
+        
+        <!-- 2.配置hibernate的映射文件 可有多个，所以使用mappingDirectoryLocations --> 
+        <property name="mappingDirectoryLocations">  
+          	<list>
+				<value>classpath:config/hbm/</value>
+			</list>
+        </property> 
+         
+        <!-- 3.配置hibernate的配置文件 -->
+        <property name="hibernateProperties">  
+            <props>
+                <!-- hibernate 所使用的数据库方言 -->
+				<prop key="hibernate.dialect">${hibernate.dialect}</prop>
+				
+				<!-- 执行操作时是否在控制台打印 SQL -->
+				<prop key="hibernate.show_sql">${hibernate.show_sql}</prop>
+				
+				<!-- 指定自动生成数据表的策略 -->
+				<prop key="hibernate.hbm2ddl.auto">${hibernate.hbm2ddl.auto}</prop>
+				
+				<!-- 是否对 SQL 进行格式化 -->
+				<prop key="hibernate.format_sql">${hibernate.format_sql}</prop>
+				
+				<!--<prop key="hibernate.query.factory_class">org.hibernate.hql.ast.ASTQueryTranslatorFactory</prop>-->
+		   </props> 
+        </property>  
+        
+    </bean>
+    
+    <!--配置spring 声明式事务 -->  
+    <!-- 配置事务管理器transactionManager -->
+    <bean id="transactionManager" class="org.springframework.orm.hibernate4.HibernateTransactionManager">  
+        <property name="sessionFactory" ref="sessionFactory" />  
+    </bean>  
+	 
+	<!-- 配置事务的切点AOP，并把切点和事务的属性关联起来 --> 
+    <aop:config>  
+        <!-- 配置切点 -->
+        <aop:pointcut id="productServiceMethods" expression="execution(* com.diandui.service..*.*(..))" />  
+        <aop:advisor advice-ref="txAdvice" pointcut-ref="productServiceMethods" />  
+    </aop:config>  
+    
+    <!-- （通知） 配置事务属性 需要事务管理器transactionManager -->  
+    <tx:advice id="txAdvice" transaction-manager="transactionManager"> 
+        <!-- 事务的传播特性 -->  
+        <tx:attributes>
+            <!-- name="规则" -->
+        	<tx:method name="save*"   propagation="REQUIRED" />
+			<tx:method name="add*"    propagation="REQUIRED" />
+			<tx:method name="create*" propagation="REQUIRED" />
+			<tx:method name="insert*" propagation="REQUIRED" />
+			<tx:method name="update*" propagation="REQUIRED" />
+			<tx:method name="merge*"  propagation="REQUIRED" />
+			<tx:method name="del*"    propagation="REQUIRED" />
+			<tx:method name="remove*" propagation="REQUIRED" />
+			<tx:method name="put*"    propagation="REQUIRED" />
+            <tx:method name="*" propagation="SUPPORTS" read-only="true" />  
+        </tx:attributes>  
+    </tx:advice> 
+    
+    <!-- 拦截器   -->
+    <!-- 解析json ，利用jackson的ObjectMapper读写Json数据 ，json数据类型转换-->
+    
+    <bean class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter">  
+	    <property name="messageConverters">  
+	        <list>  
+	            <ref bean="mappingJackson2HttpMessageConverter" />  
+	        </list>  
+	    </property>  
+    </bean>  
+    
+    <bean id="mappingJackson2HttpMessageConverter"   
+        class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">  
+        <property name="supportedMediaTypes">  
+	        <list>  
+	            <value>application/json;charset=UTF-8</value>  
+	            <value>text/html;charset=UTF-8</value>  
+	            <value>text/json;charset=UTF-8</value>      
+	        </list>  
+        </property>  
+    </bean> 
+    
+</beans>  

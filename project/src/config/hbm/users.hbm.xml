@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- 
+    用户对象 （映射配置文件  对应一个表）
+-->
+<hibernate-mapping>
+    <class name="com.diandui.model.Users" table="user">
+        <id name="userId">
+            <column name="user_id" />
+            <generator class="identity"></generator>
+        </id>
+        
+        <property name="userName" type="java.lang.String">
+            <column name="user_name" />
+        </property>
+
+        <property name="password" type="java.lang.String">
+            <column name="password" />
+        </property>
+        
+        <property name="allJifen" type="java.lang.Integer">
+            <column name="all_jifen" />
+        </property>
+        
+    </class>
+</hibernate-mapping>

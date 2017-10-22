@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- 
+    学生对象 （映射配置文件  对应一个表）
+-->
+<hibernate-mapping>
+    <class name="com.diandui.model.User" table="diandui_users">
+        <id name="id">
+            <column name="pk_id" />
+            <generator class="identity"></generator>
+        </id>
+        
+        <property name="userName" type="java.lang.String">
+            <column name="username" />
+        </property>
+
+        <property name="password" type="java.lang.String">
+            <column name="password" />
+        </property>
+        
+    </class>
+</hibernate-mapping>
